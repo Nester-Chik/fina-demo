@@ -37,11 +37,12 @@ def create_app(mode: AppMode = AppMode.PRODUCTION):
     logger = logging.getLogger("flask-app")
 
     # Setup chroma db
-    faq_data = load_faq_json_from_chroma_path()
-    if faq_data:
-        create_faq_chroma_db(faq_data)
-    else:
-        logger.info("Fail to load and create chroma db.")
+    if os.getpid() == 2:
+        faq_data = load_faq_json_from_chroma_path()
+        if faq_data:
+            create_faq_chroma_db(faq_data)
+        else:
+            logger.info("Fail to load and create chroma db.")
 
     # Register your Blueprints here
     from .routes import bot_invoke

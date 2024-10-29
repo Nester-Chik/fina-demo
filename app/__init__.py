@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 import logging
 from langchain.pydantic_v1 import BaseModel, Field
 from typing import Optional, Literal
+from chatbot.rag import load_faq_json_from_chroma_path, create_faq_chroma_db
 
 # Load environment variables from .env file
 load_dotenv()
@@ -34,6 +35,13 @@ def create_app(mode: AppMode = AppMode.PRODUCTION):
     # Setup logging
     setup_logging()
     logger = logging.getLogger("flask-app")
+
+    # Setup chroma db
+    faq_data = load_faq_json_from_chroma_path()
+    if faq_data:
+        create_faq_chroma_db(faq_data)
+    else:
+        logger.info("Fail to load and create chroma db.")
 
     # Register your Blueprints here
     from .routes import bot_invoke

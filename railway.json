@@ -1,0 +1,9 @@
+{
+    "builds": [
+      {
+        "src": "./",
+        "use": "@railway/python",
+        "cmd": "python main.py"
+      }
+    ]
+  }

@@ -21,6 +21,7 @@ logger = logging.getLogger("flask-app")
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 CHROMA_PATH = os.path.join(current_dir, "../chroma/fina3001_faq_db")
+upper_dir = os.path.join(current_dir, "..")
 
 # Function to load the FAQ JSON data
 def load_faq_json_from_chroma_path():
@@ -50,7 +51,7 @@ def download_github_release_zip(url="https://github.com/Nester-Chik/fina-demo/re
 
         # Extract the zip file
         with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
-            zip_ref.extractall(".")
+            zip_ref.extractall(upper_dir)
         logger.info(f"Extracted zip file contents from github.")
     else:
         logger.info(f"Failed to download file: Status code {response.status_code}")

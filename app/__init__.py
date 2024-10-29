@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 import logging
 from langchain.pydantic_v1 import BaseModel, Field
 from typing import Optional, Literal
-from chatbot.rag import load_faq_json_from_chroma_path, create_faq_chroma_db
+from chatbot.rag import download_github_release_zip
+
+CHROMA_PATH = "./chroma/fina3001_faq_db"
 
 # Load environment variables from .env file
 load_dotenv()
@@ -38,11 +40,14 @@ def create_app(mode: AppMode = AppMode.PRODUCTION):
 
     # Setup chroma db
     if os.getpid() == 2:
-        faq_data = load_faq_json_from_chroma_path()
-        if faq_data:
-            create_faq_chroma_db(faq_data)
+        if not os.path.exists(CHROMA_PATH):
+            logger.info(f"{CHROMA_PATH} does not exist. Proceeding to download.")
+            try:
+                download_github_release_zip()
+            except Exception as e:
+                logger.info(f"Fail to download from github release: {e}")
         else:
-            logger.info("Fail to load and create chroma db.")
+            logger.info("Chroma db already exist.")
 
     # Register your Blueprints here
     from .routes import bot_invoke

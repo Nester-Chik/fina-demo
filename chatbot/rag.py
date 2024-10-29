@@ -22,24 +22,6 @@ logger = logging.getLogger("flask-app")
 current_dir = os.path.dirname(os.path.abspath(__file__))
 CHROMA_PATH = os.path.join(current_dir, "../chroma/fina3001_faq_db")
 upper_dir = os.path.join(current_dir, "..")
-
-# Function to load the FAQ JSON data
-def load_faq_json_from_chroma_path():
-    if os.path.exists(CHROMA_PATH):
-        logger.info(f"Loading FAQ data from {CHROMA_PATH}...")
-        with open(CHROMA_PATH, 'r', encoding='utf-8') as file:
-            faq_data = json.load(file)
-        return faq_data
-    else:
-        logger.info(f"{CHROMA_PATH} does not exist. Proceeding to download.")
-        try:
-            download_github_release_zip()
-            with open(CHROMA_PATH, 'r', encoding='utf-8') as file:
-                faq_data = json.load(file)
-            return faq_data
-        except Exception as e:
-            logger.info(f"Fail to download from github release: {e}")
-            return None
     
 def download_github_release_zip(url="https://github.com/Nester-Chik/fina-demo/releases/download/v1.0.241028/chroma.zip", zip_filename="chroma.zip"):
     response = requests.get(url)
@@ -109,14 +91,5 @@ def query_faq(user_question):
 # Example usage
 if __name__ == "__main__":
     # Step 1: Parse the markdown file into question-answer pairs
-    faq_data = load_faq_json_from_chroma_path("FAQ.json")
 
-    if faq_data:
-        # Step 2: Create Chroma DB with FAQ data
-        # create_faq_chroma_db(faq_data)
-
-        # Step 3: Query the database with a sample question
-        query_faq("Can I join the same competition to earn more points?")
-
-    else:
-        logger.info("Failed to load the chroma db. Task aborted.")
+    query_faq("Can I join the same competition to earn more points?")

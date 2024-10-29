@@ -9,10 +9,13 @@ import os
 import json
 import requests
 import zipfile
+import logging
 
 # Load environment variables (assuming you have an .env file with your OpenAI API key)
 load_dotenv()
 openai.api_key = os.environ['OPENAI_API_KEY']
+
+logger = logging.getLogger("flask-app")
 
 # Define file paths
 
@@ -22,19 +25,19 @@ CHROMA_PATH = os.path.join(current_dir, "../chroma/fina3001_faq_db")
 # Function to load the FAQ JSON data
 def load_faq_json_from_chroma_path():
     if os.path.exists(CHROMA_PATH):
-        print(f"Loading FAQ data from {CHROMA_PATH}...")
+        logger.info(f"Loading FAQ data from {CHROMA_PATH}...")
         with open(CHROMA_PATH, 'r', encoding='utf-8') as file:
             faq_data = json.load(file)
         return faq_data
     else:
-        print(f"{CHROMA_PATH} does not exist. Proceeding to download.")
+        logger.info(f"{CHROMA_PATH} does not exist. Proceeding to download.")
         try:
             download_github_release_zip()
             with open(CHROMA_PATH, 'r', encoding='utf-8') as file:
                 faq_data = json.load(file)
             return faq_data
         except Exception as e:
-            print(f"Fail to download from github release: {e}")
+            logger.info(f"Fail to download from github release: {e}")
             return None
     
 def download_github_release_zip(url="https://github.com/Nester-Chik/fina-demo/releases/download/v1.0.241028/chroma.zip", zip_filename="chroma.zip"):
@@ -48,9 +51,9 @@ def download_github_release_zip(url="https://github.com/Nester-Chik/fina-demo/re
         # Extract the zip file
         with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
             zip_ref.extractall(".")
-        print(f"Extracted zip file contents from github.")
+        logger.info(f"Extracted zip file contents from github.")
     else:
-        print(f"Failed to download file: Status code {response.status_code}")
+        logger.info(f"Failed to download file: Status code {response.status_code}")
 
 def create_faq_chroma_db(faq_data):
     # Set up the specific directory for this Chroma DB
@@ -78,7 +81,7 @@ def create_faq_chroma_db(faq_data):
         persist_directory=CHROMA_PATH
     )
     
-    print(f"Saved {len(faq_documents)} FAQ vectors to Chroma DB at {CHROMA_PATH}.")
+    logger.info(f"Saved {len(faq_documents)} FAQ vectors to Chroma DB at {CHROMA_PATH}.")
 
 def query_faq(user_question):
     if not os.path.exists(CHROMA_PATH):
@@ -115,4 +118,4 @@ if __name__ == "__main__":
         query_faq("Can I join the same competition to earn more points?")
 
     else:
-        print("Failed to load the chroma db. Task aborted.")
+        logger.info("Failed to load the chroma db. Task aborted.")

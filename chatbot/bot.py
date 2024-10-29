@@ -39,7 +39,7 @@ llm_chain = PromptTemplate.from_template(template) | llm
 def invoke_bot(user_query: str) -> str:    
     # first do vector search
     faq_data = query_faq(user_query)
-    faq_result = "\n\n".join([f"Relevance score: {qa_pair["relevance_score"]}\nQ: {qa_pair["question"]}\nA: {qa_pair["answer"]}" for qa_pair in faq_data])
+    faq_result = "\n\n".join([f"Relevance score: {qa_pair['relevance_score']}\nQ: {qa_pair['question']}\nA: {qa_pair['answer']}" for qa_pair in faq_data])
 
     if all(qa_pair["relevance_score"] < 0.5 for qa_pair in faq_data):
         instruction = "None of the FAQs above solve the user query. Please suggest the user to contact the faculty office for further inquiries."

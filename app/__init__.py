@@ -1,7 +1,7 @@
 import os
 import time
-from quart import Quart
-from quart_cors import cors
+from flask import Flask
+from flask_cors import CORS
 import enum
 from dotenv import load_dotenv
 import logging
@@ -19,11 +19,11 @@ class AppMode(enum.Enum):
 
 # Create the Flask application
 def create_app(mode: AppMode = AppMode.PRODUCTION):
-    # Initialize the Quart app
-    app = Quart(__name__)
+    # Initialize the Flask app
+    app = Flask(__name__)
     
     # Enable Cross-Origin Resource Sharing (CORS)
-    cors(app)
+    CORS(app)
 
     # Configure app mode
     if mode == AppMode.DEBUG:

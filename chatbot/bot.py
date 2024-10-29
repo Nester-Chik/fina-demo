@@ -6,7 +6,7 @@ import os
 import json
 import logging
 from dotenv import load_dotenv
-from rag import query_faq
+from chatbot.rag import query_faq
 
 # Retrieve the logger that was created in the app's __init__.py
 logger = logging.getLogger("flask-app")

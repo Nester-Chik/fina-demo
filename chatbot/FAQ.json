@@ -58,5 +58,9 @@
     {
         "question": "Do I need to register for the course beforehand to record the activities I have participated in?",
         "answer": "Yes.  You will be pre-registered in the course once you are FINA major."
+    },
+    {
+        "question": "If I register for the course in a semester, is the 1 credit only count for the registered semester, or the 1 credit will be kept there in the next 3 semesters until I pass the course?",
+        "answer": "Yes, the 1 credit will only show up in the first semester that you enroll in this course.  Afterwards, it will show as 0 credit till you pass the course."
     }
 ]

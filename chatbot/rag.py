@@ -23,21 +23,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 CHROMA_PATH = os.path.join(current_dir, "../chroma/fina3001_faq_db")
 upper_dir = os.path.join(current_dir, "..")
     
-def download_github_release_zip(url="https://github.com/Nester-Chik/fina-demo/releases/download/v1.0.241028/chroma.zip", zip_filename="chroma.zip"):
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        # Write the zip file to the output directory
-        with open(zip_filename, 'wb') as file:
-            file.write(response.content)
-
-        # Extract the zip file
-        with zipfile.ZipFile(zip_filename, 'r') as zip_ref:
-            zip_ref.extractall(upper_dir)
-        logger.info(f"Extracted zip file contents from github.")
-    else:
-        logger.info(f"Failed to download file: Status code {response.status_code}")
-
 def create_faq_chroma_db(faq_data):
     # Set up the specific directory for this Chroma DB
     embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
